@@ -1,0 +1,15 @@
+{% extends 'movies/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+      <div class="col-md-11 offset-md-1">
+        {% for movie_item in movie_items %}
+          <h4>{{movie_item.movieId}} | {{movie_item.title}} Genres: {{movie_item.genres}} Tags: {{movie_item.tags}} Rating: {{rating}}</h4>
+        {% endfor %}
+      </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'movies/base.html' %}
+
+{% block content %}
+<!-- Movie List -->
+<div class="container">
+  <!--FILTERING-->
+  <div class="row">
+    <form method="get">
+        {{myFilter.form}}
+      <button type="submit" name="button">Filter</button>
+    </form>
+  </div>
+  <!--FILTERING END-->
+  <!--SORTING-->
+  <div class="row">
+    <form method="get">
+      <input type="text" name="sort" value="">
+      <button type="submit">Sort By</button>
+    </form>
+  </div>
+  <!--SORTING END-->
+  <div class="row">
+    <div class="">
+      {% for movie_item in movie_items %}
+        <div class="movie-item-container">
+          {% include 'movies/snippets/movie_snippet.html' with movie_item=movie_item %}
+        </div>
+      {% endfor %}
+      <!--PAGINATION-->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if movie_items.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">First Page</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ movie_items.previous_page_number }}">Previous Page</a></li>
+          {% endif %}
+          {% for num in movie_items.paginator.page_range %}
+            {% if movie_items.number == num %}
+              <li class="page-item"><a class="page-link" href="">{{num}}</a></li>
+            {% elif num > movie_item.number|add:'-3' and num < movie_item.number|add:'3' %}
+              <li class="page-item"><a class="page-link" href="">{{num}}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if movie_items.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ movie_items.next_page_number }}">Next Page</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ movie_items.paginator.num_pages }}">Last Page</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+        <!--PAGINATION END-->
+    </div>
+
+  </div>
+
+  <div class="row">
+    <h4>Movie REST API</h4>
+    <h6>Na podstawie danych znajdujących się na stronie https://grouplens.org/datasets/movielens/ (polecamy wykorzystać najmniejszay dataset
+      http://files.grouplens.org/datasets/movielens/ml-latest-small.zip)
+      należy zaprojektować i stworzyć aplikację w wybranym przez siebie frameworku, która będzie posiadała proste REST API:</h6>
+    <p>GET /movies/ - lista wszystkich filmów (widok powinien pozwalać na filtrowanie, sortowanie po roku produkcji filmu przykład : /movies/?year=1995,
+      /movies/?sort=-year )
+    <br>GET /movies?tag=funny&tag=animation - lista filmów otaggowanych jako "funny" ORAZ "animation"
+    <br>GET /movie/<movieId>/ - wybrany film {"title": "Tytuł", "score": 5.1, 'genres’: [Comedy], 'link’: 'link do imdb’, 'year’: 2001}
+    <br>POST /db z body {"source": "ml-latest-small"}
+    powinno wyczyścić bazę danych
+    ściągnąć data set z movielens
+    wrzucić do bazy danych wpisy z pobranego data setu.</p>
+
+  </div>
+
+</div>
+<!-- END Movie List -->
+{% endblock content %}
